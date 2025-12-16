@@ -1,0 +1,639 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{placeins} % Para \FloatBarrier
+
+% Configurações de página
+\geometry{a4paper, left=3cm, top=3cm, right=2cm, bottom=2cm}
+
+% Configuração de espaçamento
+\onehalfspacing
+
+% Configuração de cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% Configuração de seções
+\titleformat{\section}
+{\normalfont\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+{\normalfont\bfseries}{\thesubsection}{1em}{}
+
+% Comando para título
+\newcommand{\titulotcc}[1]{
+    \begin{center}
+        \large\textbf{#1}
+    \end{center}
+}
+
+\begin{document}
+
+% CAPA
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+
+    \textbf{\Large Instituto Federal de Educação, Ciência e Tecnologia da Paraíba - IFPB}
+
+    \vspace{0.5cm}
+
+    \textbf{\large Unidade Acadêmica de Informática - UAI}
+
+    \vspace{0.5cm}
+
+    \textbf{\large Bacharelado em Engenharia de Computação}
+
+    \vspace{2cm}
+
+    \textbf{\LARGE Anderson Lucas Cordeiro Braz}
+
+    \vspace{2cm}
+
+    \textbf{\Large Análise De Dados Climáticos Da Paraíba Para Identificação De Padrões E Mudanças Climáticas}
+
+    \vspace{2cm}
+
+    \textbf{\large Campina Grande - PB}
+
+    \vspace{1cm}
+
+    \textbf{\large 2025}
+
+    \vfill
+
+    Anderson Lucas Cordeiro Braz
+\end{titlepage}
+
+% FOLHA DE ROSTO
+\newpage
+\begin{center}
+    \textbf{\LARGE Análise de dados climáticos da Paraíba para identificação de padrões e mudanças climáticas}
+
+    \vspace{2cm}
+
+    \textbf{\large Monografia apresentada à Coordenação do curso de Bacharelado em Engenharia da Computação do Instituto Federal de Educação, Ciência e Tecnologia da Paraíba, como parte dos requisitos necessários à obtenção do título de Bacharel em Engenharia de Computação.}
+
+    \vspace{2cm}
+
+    \textbf{\large Orientador: Paulo Ribeiro Lins Júnior}
+
+    \vspace{2cm}
+
+    \textbf{\large Campina Grande - PB}
+
+    \vspace{1cm}
+
+    \textbf{\large 2025}
+\end{center}
+
+% AGRADECIMENTOS
+\newpage
+\section*{AGRADECIMENTOS}
+
+Agradeço ao \textbf{Instituto Federal da Paraíba – Campus Campina Grande e ao corpo} docente do curso de \textbf{Engenharia da Computação pela formação sólida e pelas} contribuições fundamentais para meu desenvolvimento técnico e científico ao longo da graduação.
+
+Aos meus pais e irmãs, pelo amor incondicional, paciência e apoio constante, e por sempre acreditarem no meu potencial, mesmo nos momentos mais desafiadores. À minha família, que esteve presente em todos os momentos, oferecendo palavras de incentivo e compreensão sempre que precisei de equilíbrio e motivação.
+
+Agradeço ao meu orientador, \textbf{Prof. Paulo Ribeiro Lins Júnior}, pela orientação, dedicação, paciência e disponibilidade, além das valiosas contribuições técnicas e científicas que foram essenciais para o desenvolvimento deste trabalho.
+
+Ao \textbf{Prof. Marcelo José Siqueira Coutinho de Almeida}, ministrante das disciplinas relacionadas ao Trabalho de Conclusão de Curso, pela orientação firme, pelas cobranças pertinentes e pelas diretrizes que contribuíram significativamente para o amadurecimento e execução desta pesquisa.
+
+Aos demais professores e colaboradores do curso, pelo compartilhamento de conhecimento, pela dedicação ao ensino e pelo incentivo permanente à pesquisa e à inovação.
+
+Agradeço também aos colegas e amigos que contribuíram, direta ou indiretamente, com discussões, sugestões, apoio e companhia ao longo desta jornada acadêmica.
+
+Por fim, reconheço o importante trabalho e a disponibilização dos dados meteorológicos realizados pela \textbf{AESA e pelo} \textbf{INMET}, fundamentais para as análises desenvolvidas neste estudo.
+
+% RESUMO
+\newpage
+\section*{RESUMO}
+
+Este trabalho apresenta uma análise estatística de dados climáticos históricos do estado da Paraíba, com o objetivo de identificar tendências e padrões associados às mudanças climáticas regionais. Foram utilizados dados pluviométricos da Agência Executiva de Gestão das Águas do Estado da Paraíba (AESA) e registros meteorológicos do Instituto Nacional de Meteorologia (INMET), abrangendo o período de 1994 a 2024. As séries temporais foram tratadas e analisadas por meio da aplicação do teste não paramétrico de Mann-Kendall e o estimador de inclinação de Sen, em suas versões modificadas por Hamed \& Rao (1998) e Yue \& Wang (2004). Os resultados apontam uma tendência significativa de redução nos índices pluviométricos em quase todas as regiões da Paraíba, acompanhada por aumento médio de aproximadamente 1 °C na temperatura do ar e diminuição da umidade relativa em torno de 3 \%, indicando que o estado se encontra em processo de aquecimento e diminuição de umidade. Conclui-se que tais alterações reforçam a necessidade de políticas públicas voltadas à adaptação climática, especialmente nas regiões do Cariri e Sertão, mais vulneráveis à desertificação.
+
+\textbf{Palavras-chave:} Mudanças climáticas. Séries temporais. Mann-Kendall. Sen's Slope. Paraíba.
+
+% ABSTRACT
+\newpage
+\section*{ABSTRACT}
+
+This work presents a statistical analysis of historical climate data from the state of Paraíba, Brazil, aiming to identify trends and patterns related to regional climate change. Rainfall data were obtained from the Paraíba State Water Management Agency (AESA) and meteorological records from the National Institute of Meteorology (INMET), covering the period from 1994 to 2024. Time series were processed and analyzed applying the non-parametric Mann-Kendall test and Sen's Slope estimator, including the modified versions proposed by Hamed \& Rao (1998) and Yue \& Wang (2004). The results indicate a significant downward trend in rainfall across most regions of Paraíba, along with an average temperature increase of approximately 1 °C and a decrease in relative humidity of about 3 \%. These findings suggest that the state is undergoing a process of warming and drying, reinforcing the need for public policies focused on climate adaptation, particularly in the Cariri and Sertão regions, which are more susceptible to desertification.
+
+\textbf{Keywords:} Climate change. Time series. Mann-Kendall. Sen's Slope. Paraíba.
+
+% SUMÁRIO
+\newpage
+\tableofcontents
+
+% LISTA DE FIGURAS E TABELAS
+\newpage
+\listoftables
+\listoffigures
+
+% CORPO DO TEXTO
+\newpage
+
+\section{INTRODUÇÃO}
+
+O clima, entendido como ``o estado médio da atmosfera obtido pela média dos eventos de tempo durante um longo período (meses, anos, séculos)'' (YNOUE; REBOITA; AMBRIZZI; SILVA, 2017, p.13) é um fator ambiental que exerce forte impacto nas atividades cotidianas e comerciais, estando em constante transformação, seja por causas naturais ou pela ação humana.
+
+Esta, por sua vez, tem contribuído significativamente para a aceleração dessas mudanças, uma vez que, ``De acordo com o IPCC (2007, 2013), as atividades humanas contribuem para as mudanças climáticas por meio de alterações na composição química da atmosfera, isto é por meio do aumento de gases de efeito estufa (GEE) na atmosfera'' (YNOUE; REBOITA; AMBRIZZI; SILVA, 2017, p.160).
+
+Diante disso, torna-se fundamental desenvolver técnicas capazes de detectar e prevenir tais alterações, uma vez que elas afetam áreas como a produção de alimentos, a geração de energia, a navegação marítima, a aviação e até mesmo a própria sobrevivência da humanidade.
+
+Os impactos das variabilidades climáticas são palpáveis em setores estratégicos como o energético e o agrícola. No semiárido brasileiro, um estudo sobre a geração de energias renováveis revelou uma tendência de queda na geração hidrelétrica, apesar de um aumento na precipitação. Essa aparente contradição foi atribuída à priorização do uso da água para abastecimento humano e irrigação. Em contrapartida, a energia solar fotovoltaica mostrou-se resistente ao aumento da temperatura, destacando seu potencial como fonte alternativa estável na região (MEDEIROS et al, 2021).
+
+No setor agrícola, a sensibilidade das culturas às condições climáticas fica evidente no estudo sobre a produtividade da batata em Hokkaido, Japão. A pesquisa identificou um ponto de inflexão climática por volta de 2008/09, marcado pelo aumento das temperaturas no verão. Verificou-se uma forte correlação negativa entre as temperaturas de abril e agosto, padrão associado à Oscilação Interdecadal do Pacífico.
+
+Primaveras frias atrasaram o plantio, enquanto verões quentes encurtaram o período de crescimento, resultando em quedas significativas de produtividade, como a registrada em 2010 (SHIMODA et al, 2018).
+
+Há diversos métodos para identificação de padrões e mudanças no clima. Dentre eles destacam-se os métodos estatísticos e o uso de técnicas de aprendizado de máquina. Para a identificação de padrões climáticos, os testes mais utilizados incluem a regressão linear, o teste de Mann-Kendall e o estimador de inclinação de Sen.
+
+Este trabalho se propõe a aplicar algumas das técnicas já existentes utilizando a linguagem de programação Python e suas bibliotecas para analisar dados climáticos históricos do estado da Paraíba, extraídos dos bancos de dados da Agência Executiva de Gestão das Águas do Estado (AESA) e do Instituto Nacional de Meteorologia (INMET), visando identificar tendências de mudanças no clima e mensurar qual o impacto do aquecimento global.
+
+\section{OBJETIVOS}
+
+\subsection{Objetivo Geral}
+Analisar dados climáticos históricos do estado da Paraíba para detecção de tendências nas variáveis climáticas ao longo das últimas três décadas.
+
+\subsection{Objetivos Específicos}
+\begin{enumerate}
+    \item Coletar e tratar dados históricos de estações meteorológicas da Paraíba.
+    \item Consolidar os dados em um banco de dados padronizado usando Pandas.
+    \item Realizar análises exploratórias mensais, anuais e regionais.
+    \item Aplicar o teste não paramétrico de Mann-Kendall e o estimador de inclinação de Sen para detectar tendências de subida ou descida nas variáveis climáticas.
+    \item Gerar gráficos e relatórios sobre padrões e anomalias climáticas.
+\end{enumerate}
+
+\section{FUNDAMENTAÇÃO TEÓRICA}
+
+\subsection{Visão Geral sobre mudanças climáticas}
+
+As mudanças climáticas representam uma das maiores ameaças ao equilíbrio ambiental e socioeconômico global. Conforme LOPES (2008), embora o clima do planeta sempre tenha variado ao longo de sua história geológica, as atividades humanas, intensificadas principalmente a partir da Revolução Industrial, têm acelerado significativamente esse processo por meio do aumento das emissões de Gases de Efeito Estufa (GEE). O autor ressalta que as projeções indicam elevações preocupantes na temperatura média global, com impactos desiguais entre regiões, afetando, sobretudo, países em desenvolvimento através de alterações na agricultura, ecossistemas e disponibilidade de recursos hídricos.
+
+Essas alterações não são apenas um fenômeno global, mas manifestam-se de forma distinta em escalas regionais e locais. OLIVEIRA et al. (2020), ao estudarem Belém (Pará), constataram que a cidade está se tornando mais quente, menos úmida e com ventos menos intensos, seguindo uma tendência regional associada a mudanças no uso do solo na Amazônia. No entanto, o aumento da precipitação na área urbana contrasta com a tendência de redução em estações rurais vizinhas, evidenciando a influência de efeitos urbanos, como rugosidade superficial e calor armazenado, que intensificam sistemas convectivos locais.
+
+O estado da Paraíba está na porção mais oriental do Nordeste Brasileiro, entre as latitudes 08°19'54,7"S e 06°0'11,1"S e as longitudes 38°47'58,3"W e 34°45'50,4"W. Faz limite ao norte com o Rio Grande do Norte, ao sul com Pernambuco, ao oeste com o Ceará e a leste é banhado pelo oceano Atlântico. O território estadual é formado por 223 municípios (AESA, 2025).
+
+Em termos climáticos, a Paraíba é dividida em seis mesorregiões climáticas: Litoral, Brejo, Agreste, Cariri/Curimatad, Sertão e Alto Sertão. Cada uma delas apresenta variações significativas de clima, influenciadas principalmente pela topografia e pela distribuição irregular das chuvas (Francisco \& Santos, 2017).
+
+\subsection{Métodos para identificação de tendências em séries temporais}
+
+A detecção de tendências em séries temporais de variáveis ambientais é fundamental para a compreensão dos impactos das mudanças climáticas. Conforme revisão abrangente de MUDELSEE (2019), a análise estatística de séries temporais climáticas requer métodos robustos que considerem as peculiaridades desses dados, como autocorrelação e distribuições não-Gaussianas. Entre os métodos mais utilizados estão o teste não paramétrico de Mann-Kendall (MK) e o estimador de inclinação de Sen (SALMI et al., 2002). O teste MK é particularmente vantajoso por não exigir normalidade dos dados e por ser robusto à presença de outliers, testando a hipótese nula de ausência de tendência contra a alternativa de existência de uma tendência monotônica (YUE; PILON; CAVADIAS, 2002). Já o estimador de Sen quantifica a magnitude dessa tendência, calculando a mediana das inclinações entre todos os pares de pontos da série, fornecendo uma taxa de mudança realista (SALMI et al., 2002).
+
+Matematicamente, o teste de Mann-Kendall baseia-se na estatística S, definida conforme a Equação (1):
+
+\[
+S = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \text{sgn}(x_j - x_i)
+\]
+
+onde $\text{sgn}()$ é a função sinal que retorna 1, 0 ou -1 para diferenças positivas, nulas ou negativas, respectivamente.
+
+Sob a hipótese nula $H_0$ (ausência de tendência), a média de S é igual a zero e a variância é dada pela equação (2):
+
+\[
+\text{Var}(S) = \frac{n(n-1)(2n+5) - \sum_{p=1}^{s} t_p(t_p-1)(2t_p+5)}{18}
+\]
+
+onde o somatório é aplicado aos grupos de valores empatados, sendo $s$ o número de grupos de dados empatados e $t_p$ o número de dados empatados no grupo $p$.
+
+A estatística padronizada $Z$ é então calculada pela Equação (3):
+
+\[
+Z =
+\begin{cases}
+\frac{S-1}{\sqrt{\text{Var}(S)}}, & \text{se } S > 0, \\
+0, & \text{se } S = 0, \\
+\frac{S+1}{\sqrt{\text{Var}(S)}}, & \text{se } S < 0.
+\end{cases}
+\]
+
+permitindo avaliar a significância da tendência por meio da distribuição normal padrão. Valores de $Z$ positivos indicam tendência crescente e negativos indicam tendência decrescente.
+
+Para contornar o problema da autocorrelação serial, foram desenvolvidas versões modificadas do teste. Hamed e Rao (1998) propuseram uma correção usando auto-correlação de Spearman, apresentada na Equação (4):
+
+\[
+\text{VarHR}^*(S) = \text{Var}(S) \cdot \left[ 1 + \frac{2}{n(n-1)(n-2)} \sum_{i=1}^{n-1}(n-i)(n-i-1)(n-i-2) \cdot \rho_s(i) \right]
+\]
+
+onde $\rho_s(i)$ é a função de autocorrelação de Spearman na defasagem $i$.
+
+Yue e Wang (2004) desenvolveram outra abordagem utilizando autocorrelação dos postos, conforme a Equação (5):
+
+\[
+\text{VarYW}^* (S) = \text{Var}(S) \cdot \left[ 1 + \frac{2}{n-1} \sum_{i=1}^{n-1}(n-i) \cdot r_i \right]
+\]
+
+onde $r_i$ é a função de autocorrelação dos postos na defasagem $i$.
+
+O estimador de Sen, por sua vez, fornece a magnitude dessa tendência, sendo definido pela Equação (6) como:
+
+\[
+\beta = \text{mediana} \left( \frac{x_j - x_i}{j-i} \right) \quad \text{para todo } i < j
+\]
+
+Assim, $\beta$ representa a variação média da variável por unidade de tempo.
+
+Em conjunto, o teste de Mann-Kendall e o estimador de Sen permitem determinar não apenas a presença de uma tendência estatisticamente significativa, mas também a sua intensidade e direção, configurando uma ferramenta robusta para o estudo de mudanças em séries climáticas e hidrológicas.
+
+Entretanto, a aplicação do teste MK requer cuidados, pois a presença de correlação serial em séries hidrológicas e climáticas pode inflar a taxa de erro Tipo I, levando à detecção de tendências falsas ou nulas. Como destaca MUDELSEE (2019), métodos de reamostragem como o moving block bootstrap (MBB) são essenciais para quantificar adequadamente as incertezas em análises de tendência climática, preservando a estrutura de autocorrelação dos dados. YUE e WANG (2004) investigaram esse problema e propuseram o uso do tamanho amostral efetivo (ESS) para corrigir o teste. Os autores demonstraram que, para uma correção adequada, é necessário primeiro remover a tendência da série, calcular o coeficiente de correlação serial a partir dos resíduos e então aplicar o ESS. Essa abordagem, denominada BHMILL-ESS-A, mostrou-se eficaz em restabelecer a confiabilidade do teste tanto em simulações de Monte Carlo quanto em estudos de caso com dados reais.
+
+A robustez dessas metodologias é comprovada em diversas aplicações. GOCIC e TRAJKOVIC (2013), por exemplo, utilizaram os testes de Mann-Kendall e Sen para analisar tendências em variáveis meteorológicas na Sérvia, identificando aumentos significativos nas temperaturas mínimas e máximas e declínio na umidade relativa em determinadas estações do ano. Os métodos apresentaram forte concordância, validando sua aplicação na detecção de mudanças climáticas em nível regional. A escolha criteriosa dos métodos de análise, considerando as particularidades dos dados climáticos, é fundamental para evitar conclusões equivocadas e garantir a confiabilidade dos resultados em estudos de mudanças climáticas (MUDELSEE, 2019).
+
+\section{DESENVOLVIMENTO}
+
+A presente pesquisa é de caráter exploratório e aplicado, com abordagem quantitativa. Foram utilizados dois conjuntos de dados distintos, provenientes de fontes oficiais: a Agência Executiva de Gestão das Águas do Estado da Paraíba (AESA) e o Instituto Nacional de Meteorologia (INMET). O critério de escolha dos períodos analisados baseou-se na disponibilidade e consistência dos dados, uma vez que períodos anteriores apresentavam lacunas ou ausência de registros completos nas respectivas bases.
+
+O primeiro conjunto de dados é composto por informações pluviométricas extraídas da base de dados da AESA. As informações foram obtidas diretamente do site oficial da agência, em formato CSV, e contêm o volume total de chuvas (em milímetros) para cada município do estado da Paraíba, agrupado mensalmente. Os dados disponibilizados pela AESA já se encontravam pré-tratados, não apresentando valores faltantes. O período analisado foi de janeiro de 1994 a dezembro de 2024, sendo que cada mês de cada ano é disponibilizado em um arquivo CSV distinto. Para unificar essas informações, utilizou-se a biblioteca Pandas, na linguagem Python, realizando a junção de todos os arquivos em um único conjunto de dados. Em seguida, foi calculada a média mensal de precipitação de todas as estações para cada mês do período analisado. Por fim, os resultados foram plotados por meio da biblioteca Matplotlib, permitindo a visualização gráfica da variação temporal das médias mensais de precipitação.
+
+Posteriormente, as médias mensais calculadas foram submetidas ao teste de Mann-Kendall, implementado pela biblioteca PyMannKendall, utilizando três variações do teste: o teste original, o teste modificado de Hamed \& Rao (1998) e o teste modificado de Yue \& Wang (2004). A aplicação desses testes teve como objetivo detectar a existência de tendências positivas ou negativas, bem como avaliar sua significância estatística. Além disso, esses métodos fornecem o Sen's slope, que representa a inclinação da tendência identificada, permitindo estimar a magnitude das variações ao longo do tempo.
+
+O segundo conjunto de dados foi obtido do site oficial do INMET e contém registros meteorológicos de estações localizadas nas seguintes cidades da Paraíba: Areia, Cabaceiras, Camaratuba, Campina Grande, João Pessoa, Monteiro, Patos e São Gonçalo. Esses dados abrangem o período de agosto de 2008 a dezembro de 2024 e estão organizados anualmente por cidade, com medições horárias de diversas variáveis climáticas. O dataset inclui as seguintes variáveis: precipitação total horária (mm), pressão atmosférica ao nível da estação (mB), pressão atmosférica máxima e mínima na hora anterior, radiação global (kJ/m²), temperatura do ar (bulbo seco, °C), temperatura do ponto de orvalho, temperaturas máxima e mínima da hora anterior, temperatura de orvalho máxima e mínima, umidade relativa do ar horária (\%) e também seus valores máximo e mínimo da hora anterior, além de direção do vento (°), velocidade do vento (m/s) e rajada máxima (m/s). Valores não medidos eram representados por -9999, os quais foram removidos durante o pré-processamento.
+
+Para esta pesquisa, foram selecionadas apenas três variáveis para análise: temperatura do ar (bulbo seco), pressão atmosférica ao nível da estação e umidade relativa do ar horária (\%), por serem diretamente associadas aos indicadores de aquecimento e secagem atmosférica estudados neste trabalho.
+
+\begin{table}[ht]
+\centering
+\caption{Estações pluviométricas analisadas}
+\label{tab:estacoes}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Estação} & \textbf{Código} & \textbf{Latitude} & \textbf{Longitude} & \textbf{Altitude} & \textbf{Data de fundação} \\
+\hline
+Areia & A310 & -6,97499999 & -35,68499999 & 574,62 & 16/11/2004 \\
+\hline
+Cabaceiras & A348 & -7,48333333 & -36,28638888 & 436 & 28/02/2008 \\
+\hline
+Camaratuba & A352 & -6,56083333 & -35,13472221 & 136 & 04/05/2008 \\
+\hline
+Campina Grande & A313 & -7,24249999 & -35,88888888 & 547,56 & 22/12/2006 \\
+\hline
+João Pessoa & A320 & -7,16583333 & -34,81527777 & 47 & 21/07/2007 \\
+\hline
+Monteiro & A334 & -7,89138888 & -37,11527777 & 603,66 & 22/08/2007 \\
+\hline
+Patos & A321 & -7,07972221 & -37,27249999 & 249 & 21/07/2007 \\
+\hline
+São Gonçalo & A333 & -6,75666666 & -38,22749999 & 233,06 & 06/11/2007 \\
+\hline
+\end{tabular}
+\end{table}
+
+Na Tabela \ref{tab:estacoes} acima, estão listadas as estações meteorológicas, o código corresponde à identificação única de cada estação na base dados do INMET. As variáveis latitude, longitude e altitude trazem as coordenadas geográficas e a elevação de cada estação em relação ao nível do mar. Já a data de fundação refere-se à data de início das medições.
+
+Devido ao elevado volume de dados, foi realizado um processamento prévio durante a importação dos arquivos para o DataFrame Pandas, que consistiu no cálculo das médias diárias, bem como dos valores máximos e mínimos para cada variável. Essa abordagem tem como objetivo reduzir a variação intra-diária e tornar a análise mais representativa das tendências gerais ao longo do tempo. A utilização de médias diárias é uma prática comum em estudos de séries temporais, especialmente em contextos ambientais, uma vez que ela suaviza os efeitos de flutuações diárias extremas ou de curta duração que podem não refletir as tendências globais (ARSHAD et al., 2019). Além disso, a média mensal das séries diárias permite capturar a dinâmica sazonal e os padrões de longo prazo sem a complexidade de processar dados em resoluções mais finas, como a escala horária.
+
+Estudos de séries temporais meteorológicas e climáticas frequentemente utilizam agregações temporais (como médias diárias ou mensais) para minimizar os efeitos de ruído e melhorar a robustez das análises estatísticas (PARK et al., 2020). Essa abordagem também facilita a visualização de padrões sazonais e mudanças nas tendências, que são de interesse em estudos de variação climática (ZHU et al., 2017). Após essa etapa, cada cidade foi agrupada em um DataFrame individual, e as médias mensais das séries diárias, máximas e mínimas foram calculadas.
+
+\begin{table}[ht]
+\centering
+\caption{Amostra do dataset transformado}
+\label{tab:amostra}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{ano\_mes} & \textbf{temp\_min} & \textbf{temp\_max} & \textbf{temp\_mean} & \textbf{umidade\_min} & \textbf{umidade\_max} & \textbf{umidade\_mean} & \textbf{pressao\_min} & \textbf{pressao\_max} & \textbf{pressao\_mean} \\
+\hline
+2008-05-01 & 21.2482 & 28.2552 & 24.2536 & 62.4017 & 94.3856 & 81.9418 & 971.2194 & 974.7872 & 973.0832 \\
+\hline
+2008-06-01 & 19.6729 & 27.2200 & 23.0031 & 60.2958 & 93.4375 & 79.8354 & 973.0542 & 976.1958 & 974.6910 \\
+\hline
+2008-07-01 & 19.3254 & 26.9323 & 22.6645 & 58.6048 & 92.0081 & 77.5419 & 974.3976 & 977.5145 & 976.0281 \\
+\hline
+2008-08-01 & 19.5202 & 28.1113 & 23.3376 & 53.6492 & 90.5242 & 74.5513 & 972.6391 & 976.3173 & 974.6064 \\
+\hline
+2008-09-01 & 20.4913 & 29.5838 & 24.6346 & 49.8500 & 87.5458 & 70.9578 & 972.5804 & 976.9733 & 974.9501 \\
+\hline
+\end{tabular}
+\end{table}
+
+Com base nesses resultados, foram gerados gráficos representativos utilizando a biblioteca Matplotlib, possibilitando a visualização da variação mensal das variáveis em cada município. As médias mensais (média, máxima e mínima) de cada variável foram posteriormente agrupadas entre as cidades, com o objetivo de determinar as médias estaduais correspondentes. Esse conjunto de dados consolidado foi, então, submetido ao teste de Mann-Kendall através da biblioteca PyMannKendall, aplicando novamente as três variações do método (original, Hamed \& Rao e Yue \& Wang), para a identificação de tendências positivas ou negativas e a determinação da significância estatística e da inclinação (Sen's slope) das tendências detectadas. Esta abordagem múltipla permite uma análise abrangente: o teste original serve como referência básica; a versão de Hamed \& Rao (1998) incorpora correções para autocorrelação via função de Spearman; e a modificação de Yue \& Wang (2004) utiliza autocorrelação dos postos, sendo particularmente eficaz para detectar tendências em séries com forte persistência temporal - como demonstrado nos dados de precipitação e umidade deste estudo, onde apenas esta última versão identificou tendências significativas.
+
+\section{RESULTADOS E DISCUSSÕES}
+
+Dadas as etapas de extração e transformação dos dados previamente descritas nos capítulos anteriores, neste capítulo serão aplicadas as técnicas estatísticas descritas anteriormente (Teste de Mann-Kendall, Estimador de inclinação de Sen), de forma a produzir e discutir os resultados de suas aplicações.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{figura_5_1.png}
+\caption{Média mensal de chuvas no período de 1994 a 2024}
+\label{fig:5.1}
+\end{figure}
+
+A Figura \ref{fig:5.1} representa a média mensal de chuvas no período de 1994 a 2024, este período foi dividido em 3 faixas de anos para representar as décadas, a faixa em vermelho representa os anos entre 1994 a 2003, em verde 2004 a 2013 e em azul de 2014 a 2024. Esta divisão foi feita com objetivo de visualizar possíveis mudanças no regime pluviométrico, ao observar o gráfico é possível identificar que a quantidade de meses que ultrapassa a média de 200 mm é superior na faixa vermelha com a quantidade de 7 meses, ao olharmos para a faixa de 2004-2013 podemos notar um volume bem superior de chuva em janeiro de 2004 já seguindo a tendência de dezembro de 2003, entretanto esse volume incomum ocorre apenas neste mês e no restante da faixa verde os volumes tendem a diminuir e a média apresentada contém a maioria dos valores abaixo de 200 mm mensais, já no período de 2014-2024 nota-se uma diminuição drástica e os valores dificilmente ultrapassam 200 mm por mês.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{figura_5_2.png}
+\caption{Média mensal da pluviometria por faixa de anos}
+\label{fig:5.2}
+\end{figure}
+
+A Figura \ref{fig:5.2} apresenta um gráfico de linha contendo a média agrupada para cada mês pela faixa de ano, ao analisarmos o gráfico podemos notar uma leve alteração no período de chuvas, por exemplo, na faixa azul o maior volume de chuva se concentrava no mês de janeiro e dezembro, na faixa seguinte (2004-2013) já nota-se um aumento de chuva no mês de janeiro e fevereiro e menor média no mês de dezembro e na última faixa o maior volume ocorre em março é há um menor volume na maioria dos meses se comparado aos anos anteriores.
+
+Entretanto, essa análise apesar de válida é ainda superficial precisando de mais métodos para uma análise mais detalhada para tal os valores serão aplicados ao Teste não paramétrico de Mann-Kendall e ao estimador de inclinação de Sen, após aplicar os dados nas 3 diferentes variações do teste foram obtidos os resultados, retratados na Tabela \ref{tab:mk_chuva} abaixo.
+
+\begin{table}[ht]
+\centering
+\caption{Resultados do teste de Mann-Kendall para pluviometria}
+\label{tab:mk_chuva}
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & \textbf{Original} & \textbf{Hamed \& Rao} & \textbf{Yue \& Wang} \\
+\hline
+\textbf{Tendência} & no trend & no trend & decreasing \\
+\hline
+\textbf{p-valor} & 0.114619 & 0.099685 & 0.000151 \\
+\hline
+\textbf{Tau} & -0.054807 & -0.054807 & -0.054807 \\
+\hline
+\textbf{Slope} & -0.040406 & -0.040406 & -0.040406 \\
+\hline
+\end{tabular}
+\end{table}
+
+Como dados de pluviometria têm naturalmente correlação o teste Original e a variação de Hamed \& Rao não detectam nenhuma tendência, mas ao aplicar a variação do teste desenvolvida por Yue \& Wang que remove a correlação dos dados antes de aplicar o teste, é detectada uma tendência de diminuição na média de chuva ao longo do período o que traz forte indicação de tendência, note que a forma de calcular o Sen Slope não muda e é igual para todos, e o estimador indica uma diminuição de 0,04 mm em média a cada mês, que ao total dos 372 meses analisados representa uma diminuição de cerca de 15 mm totais.
+
+Diante disto, é importante considerar que o volume e regime de chuvas não é uniforme em todo o estado, então a média de chuva deve ser analisada para cada região pluviométrica do estado. Com base na definição da AESA, o estado se divide nas seguintes regiões: Agreste, Alto Sertão, Brejo, Cariri, Curimataú, Litoral e Sertão.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figura_5_4.png}
+\caption{Chuva mensal por região (por faixa de anos) – Parte 1}
+\label{fig:5.4}
+\end{figure}
+
+A Figura \ref{fig:5.4} apresenta a média mensal de chuvas para cada região pluviométrica do estado entre Jan/1994 e Dez/2024 novamente dividido em 3 faixas de tempo representadas na cor vermelho, azul e verde. Há de se notar novamente uma menor média de chuva entre os anos de 2014 e 2024, em todas as regiões exceto no Litoral.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figura_5_5.png}
+\caption{Média mensal de pluviometria por região (faixas de anos) – Parte 2}
+\label{fig:5.5}
+\end{figure}
+
+A Figura \ref{fig:5.5} deixa isso mais claro de visualizar ao agrupar cada mês pela faixa dos anos, exceto na região litoral a faixa azul apresenta valores mais baixos na maioria dos meses em comparação com as faixas vermelha e verde.
+
+Ao aplicar novamente o teste de Mann-Kendall e suas variantes juntamente com o inclinador de Sen, os 2 métodos confirmam a tendência de queda, a Tabela \ref{tab:mk_regiao} apresenta o resultado dos testes.
+
+\begin{table}[ht]
+\centering
+\caption{Resultados do teste de Mann-Kendall por região}
+\label{tab:mk_regiao}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Região} & \textbf{Tendência (Yue)} & \textbf{p-valor (Yue)} & \textbf{Tau (Yue)} & \textbf{Slope (Yue)} \\
+\hline
+Agreste & decreasing & 0.001681 & -0.044619 & -0.028383 \\
+\hline
+Alto Sertão & decreasing & 0.019852 & -0.042199 & -0.020553 \\
+\hline
+Brejo & decreasing & 0.000844 & -0.041460 & -0.036348 \\
+\hline
+Cariri & decreasing & 0.020782 & -0.049054 & -0.016875 \\
+\hline
+Curimatad & decreasing & 0.007867 & -0.053908 & -0.016805 \\
+\hline
+Litoral & no trend & 0.178258 & -0.016346 & -0.021255 \\
+\hline
+Sertão & decreasing & 0.010125 & -0.039547 & -0.011803 \\
+\hline
+\end{tabular}
+\end{table}
+
+Novamente, como os dados de chuva têm forte correlação, apenas a variante de Yue \& Wang detecta a tendência significativa, e como visualizado nos gráficos anteriores a tendência é de diminuição em todas as regiões exceto a região litoral, é importante tomar nota que apesar de o teste não detectar tendência significativa para essa região, o Estimador de Sen apresenta valores negativos indicando diminuição, também é importante notar que o Estimador de Sen difere em cada região indicando que o volume em mm de diminuição difere para cada região.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{figura_5_7.png}
+\caption{Tendência da pluviometria por região (Sen's Slope - Teste de Yue)}
+\label{fig:5.7}
+\end{figure}
+
+A Figura \ref{fig:5.7} apresenta a inclinação de Sen para cada região, revelando um padrão importante: apesar de não estatisticamente significativa pelo teste de Yue \& Wang, a inclinação negativa do Litoral é numericamente maior que a de quatro outras regiões. Este aparente paradoxo pode ser explicado pela maior variabilidade intrínseca dos regimes pluviométricos litorâneos, onde sistemas meteorológicos de múltiplas escalas (frentes frias, brisas marítimas, vórtices ciclônicos) criam uma flutuação natural que mascara tendências de longo prazo nos testes estatísticos. Conforme Mudelsee (2019), séries com alta variabilidade exigem períodos mais longos ou métodos mais sensíveis para detectar significância estatística.
+
+O menor impacto relativo da diminuição pluviométrica no Litoral, mesmo sendo absoluta maior, reflete a resiliência ecossistêmica diferenciada entre regiões. Enquanto no Sertão uma redução de 10-15 mm mensais pode representar parcela significativa do total anual e comprometer a agricultura de sequeiro, no Litoral a mesma redução é amortecida pela maior disponibilidade hídrica geral e por ecossistemas adaptados a maior variabilidade interanual.
+
+A Figura \ref{fig:5.8} revela a heterogeneidade espaço-temporal das mudanças climáticas na Paraíba. O padrão linearmente negativo no Sertão sugere um processo de aridificação consistente e cumulativo, possivelmente vinculado a alterações persistentes nos padrões de circulação atmosférica em larga escala. Em contraste, o comportamento do Alto Sertão, com aceleração da tendência negativa, indica um processo não-linear, possivelmente relacionado a mudanças de regime nos sistemas climáticos regionais.
+
+Ao observarmos as outras regiões há diferentes padrões, as regiões de Curimataú e do Cariri apresentam um padrão semelhante onde a tendência aumenta da faixa de 1994-2003 para a faixa de 2004-2013, e na faixa de 2014-2024 há uma grande diminuição na tendência, chegando ao valor 0 para a região de Curimataú e valores próximos de 0 no Cariri. Ao analisar a região do Brejo há uma diminuição na tendência negativa ao passar da faixa vermelha para a verde, mas a tendência volta ao valor dos anos 1994-2003 nos anos de 2014-2024, representada em azul.
+
+A região Agreste semelhante à região do Brejo apresenta uma grande diminuição da tendência negativa a partir de 2004, e essa tendência volta a crescer negativamente a partir de 2014.
+
+Em contrapartida a região Litoral, apresenta um comportamento que difere das outras como já indicado pelo teste de Mann-Kendall, apresenta uma tendência levemente negativa entre 1994 e 2003, a partir de 2004 a tendência se inverte e chega a ficar positiva, entretanto a partir de 2014 a tendência é fortemente negativa apresentando uma queda brusca.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figura_5_8.png}
+\caption{Sen's Slope por faixa de anos – Parte 1}
+\label{fig:5.8}
+\end{figure}
+
+A partir dessas observações, ao entendermos que as diferentes variáveis climáticas são correlacionadas e sofrem influência das outras variáveis, a análise deve ser expandida para mais métricas climáticas, dessa forma foi adquirido o segundo dataset que contém as seguintes variáveis climáticas: Temperatura, Pressão Atmosférica e Umidade. Após o tratamento inicial dos dados, descrito no capítulo de desenvolvimento, inicialmente foi aplicado o Teste não paramétrico de Mann-Kendall para cada uma das variáveis.
+
+\begin{table}[ht]
+\centering
+\caption{Tendências - Pressão}
+\label{tab:pressao}
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & \textbf{pressao\_min} & \textbf{pressao\_max} & \textbf{pressao\_mean} \\
+\hline
+original\_trend & no trend & no trend & no trend \\
+\hline
+original\_p & 0.150372 & 0.208184 & 0.186175 \\
+\hline
+original\_slope & 0.003961 & 0.003656 & 0.003728 \\
+\hline
+hamed\_trend & no trend & no trend & no trend \\
+\hline
+hamed\_p & 0.349950 & 0.452130 & 0.400385 \\
+\hline
+hamed\_slope & 0.003961 & 0.003656 & 0.003728 \\
+\hline
+yue\_trend & no trend & no trend & no trend \\
+\hline
+yue\_p & 0.123100 & 0.187709 & 0.161645 \\
+\hline
+yue\_slope & 0.003961 & 0.003656 & 0.003728 \\
+\hline
+\end{tabular}
+\end{table}
+
+Primeiramente observamos a Pressão Atmosférica, ao aplicarmos os valores médios, mínimos e máximos agrupados para todo o estado, as 3 variações do teste descartam a hipótese de tendência para os 3 grupos de valores, apesar de o Estimador de Sen apresentar valores positivos eles não foram considerados significativos. A Tabela \ref{tab:pressao} acima ilustra os resultados.
+
+Faremos vista agora para os resultados do teste agora aplicado aos valores que fazem referência a variável de Temperatura em Celsius, novamente foram agrupados em mínima, média e máxima. O teste aponta para uma tendência positiva nas 3 faixas de dados, é importante notar que diferentemente dos dados pluviométricos, todas as variantes do teste indicam o mesmo resultado o que indica que apesar da correlação a tendência consegue ser detectada mesmo pelo teste original. A Tabela \ref{tab:temperatura} abaixo apresenta os resultados.
+
+\begin{table}[ht]
+\centering
+\caption{Tendências - Temperatura}
+\label{tab:temperatura}
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & \textbf{temp\_min} & \textbf{temp\_max} & \textbf{temp\_mean} \\
+\hline
+original\_trend & increasing & increasing & increasing \\
+\hline
+original\_p & 0.000169 & 0.018711 & 0.001321 \\
+\hline
+original\_slope & 0.005513 & 0.004308 & 0.004843 \\
+\hline
+hamed\_trend & increasing & increasing & increasing \\
+\hline
+hamed\_p & 0.000000 & 0.023562 & 0.000272 \\
+\hline
+hamed\_slope & 0.005513 & 0.004308 & 0.004843 \\
+\hline
+yue\_trend & increasing & increasing & increasing \\
+\hline
+yue\_p & 0.000000 & 0.000000 & 0.000000 \\
+\hline
+yue\_slope & 0.005513 & 0.004308 & 0.004843 \\
+\hline
+\end{tabular}
+\end{table}
+
+Ao olharmos agora para valores relacionados à Umidade o cenário é diferente da análise de temperatura. Este comportamento distinto pode ser atribuído à maior autocorrelação temporal presente nos dados de umidade, que mascara tendências reais quando não corrigida adequadamente. Apenas o teste que retira a correlação (Yue \& Wang) detecta uma tendência negativa, e apenas para os valores médios e máximos, enquanto os valores mínimos não tiveram uma tendência significativa. As demais variantes do teste apontam hipótese nula. A Tabela \ref{tab:umidade} abaixo traz os resultados.
+
+\begin{table}[ht]
+\centering
+\caption{Tendências - Umidade}
+\label{tab:umidade}
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & \textbf{umidade\_min} & \textbf{umidade\_max} & \textbf{umidade\_mean} \\
+\hline
+original\_trend & no trend & no trend & no trend \\
+\hline
+original\_p & 0.120579 & 0.063808 & 0.063960 \\
+\hline
+original\_slope & -0.014656 & -0.010102 & -0.015575 \\
+\hline
+hamed\_trend & no trend & no trend & no trend \\
+\hline
+hamed\_p & 0.201037 & 0.174285 & 0.155166 \\
+\hline
+hamed\_slope & -0.014656 & -0.010102 & -0.015575 \\
+\hline
+yue\_trend & no trend & decreasing & decreasing \\
+\hline
+yue\_p & 0.059766 & 0.025742 & 0.035988 \\
+\hline
+yue\_slope & -0.014656 & -0.010102 & -0.015575 \\
+\hline
+\end{tabular}
+\end{table}
+
+Para mensurar esses valores em números mais facilmente identificáveis foram gerados gráficos de linhas para cada variável do conjunto, paralelamente foram traçadas linhas de tendências baseadas no estimador de Sen para auxiliar na visualização. A Figura \ref{fig:5.12} abaixo ilustra esse resultado ao que se refere à pressão atmosférica.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{figura_5_12.png}
+\caption{Pressão Atmosférica - Valores e Tendências}
+\label{fig:5.12}
+\end{figure}
+
+Analisando o gráfico podemos perceber que a tendência assim como confirmado pelo teste de Mann-Kendall é bem pequena, considerada insignificante pelas 3 variações do teste não paramétrico de Mann-Kendall, a linha traçada está quase em paralelo às linhas externas que indicam os valores do gráfico, podemos notar também uma queda de pressão generalizada nos meses iniciais do ano de 2021.
+
+A Figura \ref{fig:5.13} abaixo apresenta os valores sobre a variável de temperatura, e podemos notar que o comportamento da linha de tendência difere bastante da análise de pressão, e indica um crescimento considerável se tratando de valores sobre a temperatura, a média das temperaturas máximas sai de 28,26°C e chega a 29,11°C tendo um crescimento de 0,85°C, enquanto as temperaturas mínimas e médias crescem 0,97°C e 1,1°C respectivamente, um crescimento assustador considerando o período de apenas 16 anos.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{figura_5_13.png}
+\caption{Temperatura - Valores e Tendências}
+\label{fig:5.13}
+\end{figure}
+
+Alinhado ao aumento de temperatura, os valores de umidade apresentam queda no mesmo período, a Figura \ref{fig:5.14} abaixo traça os gráficos e a linha de tendência. Em valores absolutos a maior queda foi referente a Umidade Média apresentando uma queda de 3,07\% seguido de 2,91\% para os valores mínimos e 1,96\% para a máxima. Diante desses dados é possível considerar que o estado da Paraíba está se tornando mais quente e mais seco.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{figura_5_14.png}
+\caption{Umidade - Valores e Tendências}
+\label{fig:5.14}
+\end{figure}
+
+Como a análise está restringida a apenas 8 postos meteorológicos localizados em 8 cidades distintas, é possível analisar as variáveis para cada uma delas individualmente. A Figura \ref{fig:5.15} abaixo apresenta, baseando-se no estimador Sen os valores das máximas para as 3 variáveis (Temperatura, Pressão e Umidade) distribuídas entre as 8 cidades.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figura_5_15.png}
+\caption{Valores máximos por cidade (Temperatura, Pressão e Umidade)}
+\label{fig:5.15}
+\end{figure}
+
+É possível a partir da visualização dos dados perceber que a Temperatura Máxima cresceu em todas as cidades observadas e na capital João Pessoa o crescimento foi consideravelmente maior que no restante dos municípios, em paralelo a isso a Umidade Máxima apresentou tanto crescimento nas cidades de Camaratuba e Campina Grande, quanto queda nas cidades de Cabaceiras, Monteiro, São Gonçalo e Areia, já as cidades de Patos e João Pessoa apesar de apresentarem valores, a hipótese de tendência foi nula, considerando os valores não significantes.
+
+Ao olharmos para as médias de cada variável, ilustradas na Figura \ref{fig:5.16} abaixo, podemos observar que a Temperatura Média aumentou em todas as cidades, apenas na cidade de Campina Grande esse crescimento foi considerado insignificante, e o maior crescimento foi medido em cidades do interior do estado como Patos e Monteiro. O gráfico de umidade média segue a tendência do gráfico referente a umidade máxima, exceto na cidade de João Pessoa, onde a máxima apresentava um crescimento considerado insignificante, a média apresenta queda. Já o gráfico referente à Pressão Atmosférica mantém o mesmo padrão dos dados de pressão máxima.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figura_5_16.png}
+\caption{Valores médios por cidade (Temperatura, Pressão e Umidade)}
+\label{fig:5.16}
+\end{figure}
+
+Partindo para a faixa de valores mínimos, na Figura \ref{fig:5.17} abaixo, os resultados são distintos quando se trata de Temperatura e Umidade, já a pressão mantém o mesmo padrão alterando apenas a tendência da cidade de Cabaceiras. Os valores de temperatura apresentaram um crescimento maior para as cidades de Patos e Monteiro, apenas a cidade de Campina Grande e São Gonçalo tiveram tendências insignificantes. Analisando os valores referentes a umidade mínima, as cidades se dividem entre tendência positiva e negativa, algumas delas com tendências consideradas insignificantes.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figura_5_17.png}
+\caption{Valores mínimos por cidade (Temperatura, Pressão e Umidade)}
+\label{fig:5.17}
+\end{figure}
+
+\section{CONCLUSÃO}
+
+Com base na análise sistemática dos dados climáticos históricos do estado da Paraíba, utilizando métodos estatísticos robustos, pode-se concluir que o estado enfrenta uma transformação climática significativa e acelerada. Os resultados demonstram uma tendência consistente de redução pluviométrica em quase todas as regiões, com exceção do Litoral, sendo as regiões do Cariri e Sertão as mais afetadas, corroborando alertas anteriores sobre processos de desertificação nessas áreas.
+
+Paralelamente, identificou-se um padrão alarmante de aquecimento, com aumento médio de aproximadamente 1°C na temperatura em apenas 16 anos, acompanhado por redução de cerca de 3\% na umidade relativa do ar. Essas mudanças são particularmente preocupantes por ocorrerem em um período relativamente curto, sugerindo uma aceleração recente do processo de mudanças climáticas na região.
+
+Do ponto de vista metodológico, este trabalho reforça a importância da correção para autocorrelação em análises climáticas, uma vez que apenas a versão modificada de Yue \& Wang do teste de Mann-Kendall foi capaz de detectar tendências significativas nas variáveis com forte persistência temporal, como precipitação e umidade. Esta constatação alerta para o risco de falsas negativas quando se utilizam métodos estatísticos que não consideram as peculiaridades dos dados climáticos.
+
+As implicações práticas desses achados são graves, especialmente para setores críticos como agricultura, recursos hídricos e segurança alimentar. A combinação de menor disponibilidade hídrica com condições atmosféricas mais quentes e secas cria um cenário de vulnerabilidade climática crescente, exigindo ações urgentes de adaptação e políticas públicas específicas para as diferentes regiões do estado.
+
+\section{REFERÊNCIAS}
+
+GOCIC, M.; TRAJKOVIC, S. Analysis of changes in meteorological variables using Mann-Kendall and Sen's slope estimator statistical tests in Serbia. \textit{Global and Planetary Change}, v. 100, p. 172–182, 2013.
+
+LOPES, J. C. de J. Mudanças climáticas e suas consequências socioeconômicas. \textit{Revista em Agronegócios e Meio Ambiente}, v. 1, n. 1, p. 127–146, jan./abr. 2008.
+
+MEDEIROS, S. E. L. et al. Influence of climatic variability on the electricity generation potential by renewable sources in the Brazilian semi-arid region. \textit{Journal of Arid Environments}, v. 184, art. 104331, 2021.
+
+OLIVEIRA, J. V. de et al. Urban climate and environmental perception about climate change in Belém, Pará, Brazil. \textit{Urban Climate}, v. 31, art. 100579, 2020.
+
+SHIMODA, S.; KANNO, H.; HIROTA, T. Time series analysis of temperature and rainfall-based weather aggregation reveals significant correlations between climate turning points and potato (\textit{Solanum tuberosum} L.) yield trends in Japan. \textit{Agricultural and Forest Meteorology}, v. 263, p. 147–155, 2018.
+
+YNOUE, R. Y.; REBOITA, M. S.; AMBRIZZI, T.; SILVA, G. A. M. da. \textit{Meteorologia: noções básicas}. São Paulo: Oficina de Textos, 2017.
+
+KENDALL, M. G. \textit{Rank correlation methods}. 4. ed. London: Griffin, 1975.
+
+SALMI, T. et al. Detecting trends of annual values of atmospheric pollutants by the Mann-Kendall test and Sen's slope estimates – the Excel template application MAKESENS. \textit{Finnish Meteorological Institute}, Publications on Air Quality, n. 31, 2002. Disponível em: https://helda.helsinki.fi/handle/10138/376127. Acesso em: 27 set. 2025.
+
+YUE, S.; PILON, P.; CAVADIAS, G. Power of the Mann–Kendall and Spearman's rho tests for detecting monotonic trends in hydrological series. \textit{Journal of Hydrology}, v. 259, n. 1–4, p. 254–271, 2002. DOI: https://doi.org/10.1016/S0022-1694(01)00594-7. Disponível em: https://doi.org/10.1016/S0022-1694(01)00594-7. Acesso em: 27 set. 2025.
+
+YUE, S.; WANG, C. The Mann-Kendall test modified by effective sample size to detect trend in serially correlated hydrological series. \textit{Water Resources Management}, Dordrecht, v. 18, n. 3, p. 201–218, jun. 2004. DOI: https://doi.org/10.1023/B:WARM.0000043140.61082.60. Disponível em: https://doi.org/10.1023/B:WARM.0000043140.61082.60. Acesso em: 27 set. 2025.
+
+MUDELSEE, M. Trend analysis of climate time series: A review of methods. \textit{Earth-Science Reviews}, v. 190, p. 310-322, 2019.
+
+ZHU, X., et al. Using monthly averages of daily data to study seasonal patterns in climate trends. \textit{Climatic Change}, v. 145, p. 349-360, 2017.
+
+PARK, J., et al. Impact of temporal aggregation on trend analysis in meteorological data. \textit{Atmospheric Research}, v. 241, art. 104924, 2020.
+
+ARSHAD, M., et al. Temporal aggregation of hourly data for trend analysis in environmental monitoring: Implications for water quality data analysis. \textit{Journal of Environmental Management}, v. 245, p. 132-141, 2019.
+
+\end{document}
